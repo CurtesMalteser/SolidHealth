@@ -1,1 +1,5 @@
 /build
+
+# OS / Logs
+.DS_Store
+*.log
