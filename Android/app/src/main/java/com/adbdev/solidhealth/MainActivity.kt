@@ -11,11 +11,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
+import com.adbdev.solidhealth.data.db.Medication
+import com.adbdev.solidhealth.data.db.MedicationDaoProvider
 import com.adbdev.solidhealth.ui.theme.SolidHealthTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val medicationDaoProvider = applicationContext as MedicationDaoProvider
+        lifecycleScope.launch {
+            medicationDaoProvider.medicationDao.insertMedication(Medication(
+                name = "placebo",
+                isActive = true,
+                dosage = "100 mg",
+                form = "tablets",
+                notes = "for breakfast"
+            ))
+        }
         enableEdgeToEdge()
         setContent {
             SolidHealthTheme {

@@ -2,6 +2,7 @@ package com.adbdev.solidhealth.data.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
@@ -9,7 +10,9 @@ import androidx.room.PrimaryKey
  * Refer to <a href="https://github.com/CurtesMalteser">CurtesMalteser GitHub</a>
  * or <a href="https://adb-dev.com">abd dev</a>
  */
-@Entity
+@Entity(
+    indices = [Index(value = ["name", "dosage", "form"], unique = true)]
+)
 data class Medication(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "name") val name: String,
