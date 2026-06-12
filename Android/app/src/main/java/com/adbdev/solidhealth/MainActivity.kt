@@ -17,22 +17,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.adbdev.solidhealth.data.db.MedicationDaoProvider
+import com.adbdev.solidhealth.ui.screen.medication.LogMedicationArgs
+import com.adbdev.solidhealth.ui.screen.medication.LogMedicationPresenter
+import com.adbdev.solidhealth.ui.screen.medication.LogMedicationScreen
 import com.adbdev.solidhealth.ui.theme.SolidHealthTheme
+import kotlin.time.Clock
 
 class MainActivity : ComponentActivity() {
+
+    private val medicationDaoProvider: MedicationDaoProvider
+        get() = application as MedicationDaoProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val args = LogMedicationArgs(
+            medicationDao = medicationDaoProvider.medicationDao,
+            clock = Clock.System
+        )
         enableEdgeToEdge()
         setContent {
-            SolidHealthTheme(dynamicColor = false) {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {AppBar(R.string.app_name)},
-                ) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+
+            with(args) {
+                val state = LogMedicationPresenter()
+                SolidHealthTheme(dynamicColor = false) {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        topBar = {AppBar(R.string.app_name)},
+                    ) { innerPadding ->
+                        LogMedicationScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            state = state,
+                            onAction = {
+
+                            }
+                        )
+                    }
                 }
             }
         }
